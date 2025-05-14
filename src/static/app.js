@@ -21,20 +21,34 @@ document.addEventListener("DOMContentLoaded", () => {
         const spotsLeft = details.max_participants - details.participants.length;
 
         // Create participants list
-        const participantsList = details.participants.length
-          ? `<ul>${details.participants.map((p) => `<li>${p}</li>`).join("")}</ul>`
-          : "<p>No participants yet.</p>";
+        const participantsContainer = document.createElement("div");
+        participantsContainer.className = "participants";
+
+        const participantsHeader = document.createElement("h5");
+        participantsHeader.textContent = "Participants:";
+        participantsContainer.appendChild(participantsHeader);
+
+        if (details.participants.length) {
+          const participantsList = document.createElement("ul");
+          details.participants.forEach((participant) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = participant;
+            participantsList.appendChild(listItem);
+          });
+          participantsContainer.appendChild(participantsList);
+        } else {
+          const noParticipantsMessage = document.createElement("p");
+          noParticipantsMessage.textContent = "No participants yet.";
+          participantsContainer.appendChild(noParticipantsMessage);
+        }
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          <div class="participants">
-            <h5>Participants:</h5>
-            ${participantsList}
-          </div>
         `;
+        activityCard.appendChild(participantsContainer);
 
         activitiesList.appendChild(activityCard);
 
